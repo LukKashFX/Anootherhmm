@@ -175,56 +175,102 @@
   animation: tap-pop 0.7s ease-out forwards;
 }
 
-/* Upward Floating Small Coin & Burst Animation with Smooth Fluid Slow-Paced Motion */
-@keyframes float-coin-anim {
+/* Slow, liquid tap ripples. The Tap Area's overflow-hidden clips every wave at its frame. */
+@keyframes tap-water-spread {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) translate(0, 0) scale(calc(var(--anim-scale, 1) * 0.75))
-      rotate(var(--rot-start, 0deg));
+    transform: scale(0.16);
+    border-radius: 48% 52% 50% 50% / 50% 48% 52% 50%;
   }
-  12% {
-    opacity: 1;
-    transform: translate(-50%, -50%)
-      translate(calc(var(--wave-x, 14px) * -0.4), calc(var(--drift-y, -80px) * 0.15))
-      scale(calc(var(--anim-scale, 1) * 1)) rotate(calc(var(--rot-start, 0deg) + 3deg));
+  14% {
+    opacity: 0.42;
   }
-  35% {
-    opacity: 1;
-    transform: translate(-50%, -50%)
-      translate(calc(var(--wave-x, 14px) * 0.3), calc(var(--drift-y, -80px) * 0.4))
-      scale(calc(var(--anim-scale, 1) * 1.04)) rotate(calc(var(--rot-end, 15deg) * 0.3));
-  }
-  60% {
-    opacity: 1;
-    transform: translate(-50%, -50%)
-      translate(calc(var(--wave-x, 14px) * 0.8), calc(var(--drift-y, -80px) * 0.68))
-      scale(calc(var(--anim-scale, 1) * 1.08)) rotate(calc(var(--rot-end, 15deg) * 0.65));
-  }
-  82% {
-    opacity: 1;
-    transform: translate(-50%, -50%)
-      translate(
-        calc(var(--drift-x, 0px) * 0.85 + var(--wave-x, 14px) * 0.15),
-        calc(var(--drift-y, -80px) * 0.88)
-      )
-      scale(calc(var(--anim-scale, 1) * 1.15)) rotate(var(--rot-end, 15deg));
-    filter: brightness(1.3) drop-shadow(0 0 10px #facc15);
-  }
-  92% {
-    opacity: 0.95;
-    transform: translate(-50%, -50%)
-      translate(var(--drift-x, 0px), calc(var(--drift-y, -80px) * 0.96))
-      scale(calc(var(--anim-scale, 1) * 1.25)) rotate(calc(var(--rot-end, 15deg) + 4deg));
-    filter: brightness(1.7) drop-shadow(0 0 14px #facc15);
+  58% {
+    opacity: 0.24;
+    border-radius: 54% 46% 47% 53% / 46% 54% 48% 52%;
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) translate(var(--drift-x, 0px), var(--drift-y, -80px))
-      scale(calc(var(--anim-scale, 1) * 1.4));
-    filter: brightness(2) drop-shadow(0 0 20px #facc15);
+    transform: scale(18);
+    border-radius: 50%;
   }
 }
+.tap-water-ripple {
+  position: absolute;
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  contain: layout paint;
+}
+.tap-water-ring {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border: 1px solid rgba(196, 181, 253, 0.7);
+  border-radius: 48% 52% 50% 50% / 50% 48% 52% 50%;
+  box-shadow:
+    0 0 8px rgba(167, 139, 250, 0.2),
+    inset 0 0 7px rgba(167, 139, 250, 0.12);
+  will-change: transform, opacity;
+  animation: tap-water-spread 2.15s cubic-bezier(0.18, 0.58, 0.28, 1) forwards;
+}
+.tap-water-ring-b {
+  animation-delay: 220ms;
+  border-color: rgba(216, 205, 255, 0.46);
+  transform: scale(0.12);
+}
+.tap-water-glint {
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(221, 214, 254, 0.3), rgba(167, 139, 250, 0.08) 48%, transparent 76%);
+  opacity: 0;
+  animation: tap-water-glint 850ms ease-out forwards;
+}
+@keyframes tap-water-glint {
+  0% { opacity: 0.7; transform: scale(0.35); }
+  45% { opacity: 0.22; transform: scale(1.8); }
+  100% { opacity: 0; transform: scale(2.6); }
+}
 
+/* Coin appearance is rebuilt as a soft materialisation, not a late burst. */
+@keyframes float-coin-anim {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(0, 5px) scale(calc(var(--anim-scale, 1) * 0.62))
+      rotate(-8deg);
+  }
+  14% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(calc(var(--wave-x, 14px) * -0.12), -2px)
+      scale(calc(var(--anim-scale, 1) * 1.06)) rotate(2deg);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(calc(var(--wave-x, 14px) * 0.12), -8px)
+      scale(var(--anim-scale, 1)) rotate(0deg);
+  }
+  58% {
+    opacity: 1;
+    transform: translate(-50%, -50%)
+      translate(calc(var(--wave-x, 14px) * 0.55), calc(var(--drift-y, -80px) * 0.56))
+      scale(calc(var(--anim-scale, 1) * 1.02)) rotate(calc(var(--rot-end, 10deg) * 0.35));
+  }
+  82% {
+    opacity: 0.92;
+    transform: translate(-50%, -50%)
+      translate(calc(var(--drift-x, 0px) * 0.82), calc(var(--drift-y, -80px) * 0.84))
+      scale(calc(var(--anim-scale, 1) * 1.04)) rotate(var(--rot-end, 10deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%)
+      translate(var(--drift-x, 0px), var(--drift-y, -80px))
+      scale(calc(var(--anim-scale, 1) * 0.96)) rotate(var(--rot-end, 10deg));
+  }
+}
 @keyframes float-cash-anim {
   0% {
     opacity: 0;
@@ -246,114 +292,24 @@
       scale(0.92);
   }
 }
-
-@keyframes burst-ring-anim {
-  0%,
-  80% {
-    opacity: 0;
-    transform: scale(0.4);
-  }
-  88% {
-    opacity: 0.9;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(2.2);
-  }
-}
-
-@keyframes sparkle-burst-1 {
-  0%,
-  80% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-  88% {
-    opacity: 1;
-    transform: translate(14px, -14px) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(24px, -24px) scale(0.2);
-  }
-}
-@keyframes sparkle-burst-2 {
-  0%,
-  80% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-  88% {
-    opacity: 1;
-    transform: translate(-14px, -14px) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-24px, -24px) scale(0.2);
-  }
-}
-@keyframes sparkle-burst-3 {
-  0%,
-  80% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-  88% {
-    opacity: 1;
-    transform: translate(-14px, 14px) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-24px, 24px) scale(0.2);
-  }
-}
-@keyframes sparkle-burst-4 {
-  0%,
-  80% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-  88% {
-    opacity: 1;
-    transform: translate(14px, 14px) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(24px, 24px) scale(0.2);
-  }
-}
-
 .float-small-coin {
-  animation: float-coin-anim var(--anim-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: float-coin-anim var(--anim-duration, 1.5s) cubic-bezier(0.22, 0.62, 0.28, 1) forwards;
 }
 .float-cash-text {
-  animation: float-cash-anim var(--anim-duration, 1.4s) ease-out forwards;
+  animation: float-cash-anim var(--anim-duration, 1.5s) ease-out forwards;
 }
-.coin-burst-ring {
-  animation: burst-ring-anim var(--anim-duration, 1.4s) ease-out forwards;
+.coin-liquid-sheen {
+  pointer-events: none;
+  background: radial-gradient(ellipse at 32% 24%, rgba(255, 255, 220, 0.42), transparent 42%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: coin-sheen-reveal var(--anim-duration, 1.5s) ease-out forwards;
 }
-.burst-sparkle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background-color: #facc15;
-  box-shadow: 0 0 6px #facc15;
-}
-.burst-sparkle-1 {
-  animation: sparkle-burst-1 var(--anim-duration, 1.4s) ease-out forwards;
-}
-.burst-sparkle-2 {
-  animation: sparkle-burst-2 var(--anim-duration, 1.4s) ease-out forwards;
-}
-.burst-sparkle-3 {
-  animation: sparkle-burst-3 var(--anim-duration, 0.7s) ease-out forwards;
-}
-.burst-sparkle-4 {
-  animation: sparkle-burst-4 var(--anim-duration, 0.7s) ease-out forwards;
+@keyframes coin-sheen-reveal {
+  0%, 12% { opacity: 0; transform: scale(0.72); }
+  28% { opacity: 0.75; transform: scale(1.02); }
+  52% { opacity: 0.28; transform: scale(1.08); }
+  100% { opacity: 0; transform: scale(1.12); }
 }
 
 .game-panel,
