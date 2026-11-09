@@ -193,6 +193,20 @@ function HomePage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.14),transparent_70%)]" />
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(139,92,246,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(139,92,246,0.04)_1px,transparent_1px)] bg-[size:28px_28px]" />
 
+          {/* Tap-generated water disturbance. Each wave is clipped by this frame. */}
+          {pops.map((pp) => (
+            <div
+              key={`ripple-${pp.id}`}
+              aria-hidden="true"
+              className="tap-water-ripple"
+              style={{ left: pp.x, top: pp.y } as React.CSSProperties}
+            >
+              <span className="tap-water-ring tap-water-ring-a" />
+              <span className="tap-water-ring tap-water-ring-b" />
+              <span className="tap-water-glint" />
+            </div>
+          ))}
+
           {/* Center Guide / Interactive Prompt */}
           <div className="pointer-events-none z-0 flex flex-col items-center justify-center opacity-45 group-hover:opacity-75 transition-opacity">
             <div className="h-10 w-10 rounded-full border border-primary/40 flex items-center justify-center mb-1.5 bg-primary/10 shadow-[0_0_12px_rgba(139,92,246,0.2)]">
@@ -228,20 +242,14 @@ function HomePage() {
                 +{money(value)}
               </div>
 
-              {/* Upward Floating Small Coin with Burst Ring & Sparkles */}
+              {/* Newly materialising coin: soft reveal, gentle settle, then the existing upward drift */}
               <div className="float-small-coin relative">
                 <img
                   src="/assets/aistudio/file_000000001f808246b3f630ace71f936f_d89c4e38.png"
                   alt=""
-                  className="h-7 w-7 sm:h-8 sm:w-8 object-contain drop-shadow-[0_0_10px_rgba(250,204,21,0.9)]"
+                  className="h-7 w-7 sm:h-8 sm:w-8 object-contain drop-shadow-[0_0_10px_rgba(250,204,21,0.75)]"
                 />
-                {/* Burst Ring Expanding */}
-                <div className="coin-burst-ring absolute inset-0 rounded-full border-2 border-gold/90" />
-                {/* 4 Sparkle Particles Bursting Outward */}
-                <div className="burst-sparkle burst-sparkle-1" />
-                <div className="burst-sparkle burst-sparkle-2" />
-                <div className="burst-sparkle burst-sparkle-3" />
-                <div className="burst-sparkle burst-sparkle-4" />
+                <span className="coin-liquid-sheen absolute inset-0 rounded-full" />
               </div>
             </div>
           ))}
